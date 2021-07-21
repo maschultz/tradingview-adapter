@@ -162,7 +162,7 @@ class PolygonAdapter {
 	 *  @param  {Boolean}   firstRequest If this is the first request for this symbol
 	 *  @return {null}
 	 */
-	getBars(symbolInfo, resolution, fromts, to, cb, cberr, firstRequest) {
+	getBars(symbolInfo, resolution, from, to, cb, cberr, firstRequest) {
 		let multiplier = 1;
 		let timespan = 'minute';
 		if (resolution == 'D' || resolution == '1D') timespan = 'day';
@@ -176,8 +176,8 @@ class PolygonAdapter {
 		}
 		axios({
 			url: `${BASE_URL}/v2/aggs/ticker/${
-				symbolInfo.ticker
-			}/range/${multiplier}/${timespan}/${fromts * 1000}/${to * 1000}`,
+				symbolInfo.ticker.ticker
+			}/range/${multiplier}/${timespan}/${from * 1000}/${to * 1000}`,
 			params: { apikey: this.apikey },
 		})
 			.then((data) => {
