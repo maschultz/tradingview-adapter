@@ -126,7 +126,7 @@ class PolygonAdapter {
 			.get(`${BASE_URL}/vX/reference/tickers/${symbol}?apiKey=${this.apikey}`)
 			.then((data) => {
 				console.log('DATAAA', data);
-				let c = Get(data, 'symbolInfo.results', {});
+				let c = Get(data, 'data.results', {});
 				let intFirst = Get(c, 'aggs.intraday.first', false);
 				let dayFirst = Get(c, 'aggs.daily.first', false);
 				cb({
