@@ -130,13 +130,12 @@ class PolygonAdapter {
 				// let intFirst = Get(c, 'aggs.intraday.first', false);
 				// let dayFirst = Get(c, 'aggs.daily.first', false);
 				cb({
-					name: c.ticker.ticker,
-					ticker: c.ticker.ticker,
+					name: c.ticker,
+					ticker: c.ticker,
 					session: '24x7',
-					type: 'crypto',
+					type: 'bitcoin',
 					minmov: 1,
-					pricescale: 100000000,
-					exchange: c.ticker.exchange,
+					pricescale: 100,
 					timezone: 'America/New_York',
 					// first_intraday: intFirst,
 					has_intraday: true,
@@ -162,7 +161,9 @@ class PolygonAdapter {
 	 *  @param  {Boolean}   firstRequest If this is the first request for this symbol
 	 *  @return {null}
 	 */
-	getBars(symbolInfo, resolution, from, to, cb, cberr, firstRequest) {
+	getBars(symbolInfo, resolution, periodParams, cb, cberr) {
+		const { from, to, firstDataRequest } = periodParams;
+		console.log('[getBars]: Method call', symbolInfo, resolution, from, to);
 		let multiplier = 1;
 		let timespan = 'minute';
 		if (resolution == 'D' || resolution == '1D') timespan = 'day';
@@ -176,7 +177,7 @@ class PolygonAdapter {
 		}
 		axios({
 			url: `${BASE_URL}/v2/aggs/ticker/${
-				symbolInfo.ticker.ticker
+				symbolInfo.ticker
 			}/range/${multiplier}/${timespan}/${from * 1000}/${to * 1000}`,
 			params: { apikey: this.apikey },
 		})
