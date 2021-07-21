@@ -67,7 +67,7 @@ class PolygonAdapter {
 		let now = Date.now();
 		Each(this.subscriptions, (sub) => {
 			this.getBars(
-				sub.symbol,
+				sub.symbolInfo,
 				sub.interval,
 				(now - 120 * 1000) / 1000,
 				now / 1000,
@@ -147,6 +147,8 @@ class PolygonAdapter {
 					supported_resolutions: SUPPORTED_RESOLUTIONS,
 				});
 			});
+		console.log('symbolInfo might be0:', symbolInfo);
+		console.log('symbolInfo might be1:', SymbolInfo);
 	}
 
 	/**
@@ -160,7 +162,7 @@ class PolygonAdapter {
 	 *  @param  {Boolean}   firstRequest If this is the first request for this symbol
 	 *  @return {null}
 	 */
-	getBars(symbol, resolution, fromts, to, cb, cberr, firstRequest) {
+	getBars(symbolInfo, resolution, fromts, to, cb, cberr, firstRequest) {
 		let multiplier = 1;
 		let timespan = 'minute';
 		if (resolution == 'D' || resolution == '1D') timespan = 'day';
@@ -174,12 +176,11 @@ class PolygonAdapter {
 		}
 		axios({
 			url: `${BASE_URL}/v2/aggs/ticker/${
-				symbol.ticker
+				symbolInfo.ticker
 			}/range/${multiplier}/${timespan}/${fromts * 1000}/${to * 1000}`,
 			params: { apikey: this.apikey },
 		})
 			.then((data) => {
-				console.log(`The URL is now: ${url}, ${data.url} -- data is: ${data}.`);
 				let bars = [];
 				bars = Map(data.data.results, (t) => {
 					return {
@@ -206,16 +207,16 @@ class PolygonAdapter {
 	 *  @param  {String}   key        Unique key for this subscription
 	 *  @return {null}
 	 */
-	subscribeBars(symbol, interval, cb, key) {
+	subscribeBars(symbolInfo, interval, cb, key) {
 		let sub = {
 			key: `${key}`,
-			symbol: symbol,
+			symbolInfo: symbolInfo,
 			interval: interval,
 			callback: cb,
 		};
 		// Currently only allow minute subscriptions:
 		if (sub.interval != '1') return;
-		if (this.realtimeEnabled) this.ws.subscribe(`AM.${symbol.ticker}`);
+		if (this.realtimeEnabled) this.ws.subscribe(`AM.${symbolInfo.ticker}`);
 		this.subscriptions.push(sub);
 	}
 
