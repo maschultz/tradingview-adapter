@@ -130,7 +130,7 @@ class PolygonAdapter {
 				// let intFirst = Get(c, 'aggs.intraday.first', false);
 				// let dayFirst = Get(c, 'aggs.daily.first', false);
 				cb({
-					name: `${c.ticker.ticker}`,
+					name: c.ticker.ticker,
 					ticker: c.ticker.ticker,
 					session: '24x7',
 					type: 'crypto',
