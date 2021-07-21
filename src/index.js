@@ -89,7 +89,7 @@ class PolygonAdapter {
 	 */
 	_searchSymbols(input, exchange, symbolType, cb) {
 		axios({
-			url: `${BASE_URL}/v2/reference/tickers?search=${input}&apikey=${this.apikey}`,
+			url: `${BASE_URL}/vX/reference/tickers/${input}?&apikey=${this.apikey}`,
 		})
 			.then((res) => {
 				console.log('search results:', res);
@@ -128,9 +128,7 @@ class PolygonAdapter {
 			CRYPTO: 'bitcoin',
 		};
 		axios
-			.get(
-				`${BASE_URL}/v2/reference/tickers?search=${symbol}&perpage=50&page=1&apiKey=${this.apikey}`
-			)
+			.get(`${BASE_URL}/vX/reference/tickers/${symbol}?&apiKey=${this.apikey}`)
 			.then((data) => {
 				console.log('DATAAA', data);
 				let c = Get(data, 'data.tickers[0]', {});
