@@ -129,9 +129,9 @@ class PolygonAdapter {
 		};
 		axios
 			.get(`${BASE_URL}/vX/reference/tickers/${symbol}?apiKey=${this.apikey}`)
-			.then((data) => {
-				console.log('DATAAA', data);
-				let c = Get(data, 'data.results', {});
+			.then((symbolInfo) => {
+				console.log('DATAAA', symbolInfo);
+				let c = Get(symbolInfo, 'symbolInfo.results', {});
 				let intFirst = Get(c, 'aggs.intraday.first', false);
 				let dayFirst = Get(c, 'aggs.daily.first', false);
 				cb({
@@ -147,8 +147,6 @@ class PolygonAdapter {
 					supported_resolutions: SUPPORTED_RESOLUTIONS,
 				});
 			});
-		console.log('symbolInfo might be0:', symbolInfo);
-		console.log('symbolInfo might be1:', SymbolInfo);
 	}
 
 	/**
