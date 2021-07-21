@@ -89,7 +89,7 @@ class PolygonAdapter {
 	 */
 	_searchSymbols(input, exchange, symbolType, cb) {
 		axios({
-			url: `${BASE_URL}/vX/reference/tickers/${input}?&apikey=${this.apikey}`,
+			url: `${BASE_URL}/vX/reference/tickers?search=${input}&apikey=${this.apikey}`,
 		})
 			.then((res) => {
 				console.log('search results:', res);
@@ -128,21 +128,22 @@ class PolygonAdapter {
 			CRYPTO: 'bitcoin',
 		};
 		axios
-			.get(`${BASE_URL}/vX/reference/tickers/${symbol}?&apiKey=${this.apikey}`)
+			.get(`${BASE_URL}/vX/reference/tickers/${symbol}?apiKey=${this.apikey}`)
 			.then((data) => {
 				console.log('DATAAA', data);
-				let c = Get(data, 'data.tickers[0]', {});
-				console.log('c', c);
+				let c = Get(data, 'data.results', {});
+				let intFirst = Get(c, 'aggs.intraday.first', false);
+				let dayFirst = Get(c, 'aggs.daily.first', false);
 				cb({
-					name: c.name,
-					ticker: c.ticker,
-					type: TickerTypeMap[c.market] || 'stocks',
-					exchange: c.primaryExch,
-					minmov: 1,
-					pricescale: 100,
-					session: '0900-1630',
+					name: c.ticker.ticker,
+					ticker: c.ticker.ticker,
+					type: TickerTypeMap[c.ticker.type] || 'stocks',
+					exchange: c.ticker.exchange,
 					timezone: 'America/New_York',
-					has_intraday: true,
+					first_intraday: intFirst,
+					has_intraday: intFirst != false,
+					first_daily: dayFirst,
+					has_daily: dayFirst != false,
 					supported_resolutions: SUPPORTED_RESOLUTIONS,
 				});
 			});
