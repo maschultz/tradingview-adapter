@@ -179,6 +179,7 @@ class PolygonAdapter {
 			params: { apikey: this.apikey },
 		})
 			.then((data) => {
+				console.log(`The URL is now: ${url}, ${data.url} -- data is: ${data}.`);
 				let bars = [];
 				bars = Map(data.data.results, (t) => {
 					return {

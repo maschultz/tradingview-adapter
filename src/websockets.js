@@ -19,6 +19,7 @@ class PolygonWebsockets extends EventEmitter {
 	}
 	connect() {
 		this.connected = false;
+		// Updated URL below per docs
 		this.ws = new WebSocket('wss://socket.polygon.io/crypto');
 		this.ws.onopen = this.onOpen.bind(this);
 		this.ws.onclose = this.onDisconnect.bind(this);
