@@ -122,27 +122,28 @@ class PolygonAdapter {
 	 */
 	resolveSymbol(symbol, cb, cberr) {
 		console.log('resolve symbol:', symbol);
-		let TickerTypeMap = {
-			STOCKS: 'stock',
-			FX: 'forex',
-			CRYPTO: 'bitcoin',
-		};
 		axios
 			.get(`${BASE_URL}/vX/reference/tickers/${symbol}?apiKey=${this.apikey}`)
-			.then((symbolInfo) => {
-				console.log('DATAAA', symbolInfo);
-				let c = Get(symbolInfo, 'symbolInfo.results', {});
+			.then((data) => {
+				console.log('DATAAA', data);
+				let c = Get(data, 'symbolInfo.results', {});
 				let intFirst = Get(c, 'aggs.intraday.first', false);
 				let dayFirst = Get(c, 'aggs.daily.first', false);
 				cb({
 					name: c.ticker.ticker,
 					ticker: c.ticker.ticker,
-					type: TickerTypeMap[c.ticker.type] || 'stocks',
+					session: '24x7',
+					type: 'crypto',
+					minmov: 1,
+					pricescale: 100000000,
 					exchange: c.ticker.exchange,
 					timezone: 'America/New_York',
 					first_intraday: intFirst,
 					has_intraday: intFirst != false,
+					intraday_multipliers: ['1', '60'],
+					volume_precision: 8,
 					first_daily: dayFirst,
+					data_status: 'streaming',
 					has_daily: dayFirst != false,
 					supported_resolutions: SUPPORTED_RESOLUTIONS,
 				});
