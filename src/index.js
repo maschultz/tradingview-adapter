@@ -125,7 +125,7 @@ class PolygonAdapter {
 		axios
 			.get(`${BASE_URL}/vX/reference/tickers/${symbol}?apiKey=${this.apikey}`)
 			.then((data) => {
-				console.log('DATAAA', data);
+				// console.log('DATAAA', data);
 				let c = Get(data, 'data.results', {});
 				// let intFirst = Get(c, 'aggs.intraday.first', false);
 				// let dayFirst = Get(c, 'aggs.daily.first', false);
@@ -163,7 +163,7 @@ class PolygonAdapter {
 	 */
 	getBars(symbolInfo, resolution, periodParams, cb, cberr) {
 		const { from, to, firstDataRequest } = periodParams;
-		console.log('[getBars]: Method call', symbolInfo, resolution, from, to);
+		// console.log('[getBars]: Method call', symbolInfo, resolution, from, to);
 		let multiplier = 1;
 		let timespan = 'minute';
 		if (resolution == 'D' || resolution == '1D') timespan = 'day';

@@ -6,7 +6,7 @@ class PolygonWebsockets extends EventEmitter {
 		super();
 		this.subscriptions = [];
 		this.ws = null;
-		console.log('Polygon WebSocket class initialized..');
+		console.log('Polygon WebSocket class initialized.');
 		this.apiKey = params.apiKey;
 		this.connect();
 	}
