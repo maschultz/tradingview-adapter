@@ -34,10 +34,16 @@ class PolygonWebsockets extends EventEmitter {
 		this.sendSubscriptions(this.subscriptions);
 	}
 	sendSubscriptions(subscriptions) {
-		if (subscriptions.length == 0) return;
+		if (subscriptions.length == 0) {
+			console.log(
+				'no subscriptions detected in websocket file, check the pass from the index file.'
+			);
+			return;
+		}
 		this.ws.send(
 			`{"action":"subscribe","params":"${subscriptions.join(',')}"}`
 		);
+		console.log('looks like we got a signal, and here it is: ' + this);
 	}
 	onDisconnect() {
 		setTimeout(this.connect.bind(this), 2000);

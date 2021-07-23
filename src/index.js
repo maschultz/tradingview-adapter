@@ -58,6 +58,9 @@ class PolygonAdapter {
 		}
 		setTimeout(function () {
 			cb();
+			console.log(
+				'this is the callback, there still may be an issue here: ' + cb()
+			);
 		}, 0);
 	}
 
@@ -217,10 +220,17 @@ class PolygonAdapter {
 			interval: interval,
 			callback: cb,
 		};
+
+		console.log('interval:' + sub.interval);
 		// Currently only allow minute subscriptions:
-		if (sub.interval != '1') return;
-		if (this.realtimeEnabled) this.ws.subscribe(`AM.${symbolInfo.ticker}`);
+		if (sub.interval != '1D') {
+			console.log('sub interval did not work so the whole thing was cancelled');
+			return;
+		}
+		// if (this.realtimeEnabled) this.ws.subscribe(`AM.${symbolInfo.ticker}`);
+		if (this.realtimeEnabled) this.ws.subscribe(`XA.${symbolInfo.ticker}`);
 		this.subscriptions.push(sub);
+		console.log('subscribeBars subscription listing details:' + this);
 	}
 
 	/**
