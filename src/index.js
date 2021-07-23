@@ -56,7 +56,9 @@ class PolygonAdapter {
 		} else {
 			setInterval(this.onInterval.bind(this), POLL_INTERVAL * 1000);
 		}
-		cb();
+		setTimeout(function () {
+			cb();
+		}, 0);
 	}
 
 	/**
