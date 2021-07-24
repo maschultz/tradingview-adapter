@@ -50,7 +50,7 @@ class PolygonAdapter {
 	 *  @return {null}
 	 */
 	onReady(cb) {
-		console.log('Polygon Adapter Ready');
+		// console.log('Polygon Adapter Ready');
 		if (this.realtimeEnabled) {
 			this.wsListeners();
 		} else {
@@ -58,9 +58,6 @@ class PolygonAdapter {
 		}
 		setTimeout(function () {
 			cb();
-			console.log(
-				'this is the callback, there still may be an issue here: ' + cb()
-			);
 		}, 0);
 	}
 
@@ -82,6 +79,7 @@ class PolygonAdapter {
 				}
 			);
 		});
+		// console.log("new subscriptions model in onInterval" + this.subscriptions);
 	}
 
 	/**
@@ -221,16 +219,18 @@ class PolygonAdapter {
 			callback: cb,
 		};
 
-		console.log('interval:' + sub.interval);
 		// Currently only allow minute subscriptions:
 		if (sub.interval != '1D') {
-			console.log('sub interval did not work so the whole thing was cancelled');
 			return;
 		}
+
+		const symbol = symbolInfo.ticker.substring(2);
+		const symbolresult = symbol.substring(0, symbol.length - 3);
+		const symbolFinal = symbolresult + '-USD';
+
 		// if (this.realtimeEnabled) this.ws.subscribe(`AM.${symbolInfo.ticker}`);
-		if (this.realtimeEnabled) this.ws.subscribe(`XA.${symbolInfo.ticker}`);
+		if (this.realtimeEnabled) this.ws.subscribe(`XA.${symbolFinal}`);
 		this.subscriptions.push(sub);
-		console.log('subscribeBars subscription listing details:' + this);
 	}
 
 	/**
@@ -249,7 +249,7 @@ class PolygonAdapter {
 	wsListeners() {
 		if (!this.realtimeEnabled) return;
 		this.ws = new PolygonWebsockets({ apiKey: this.apikey });
-		this.ws.on('AM', (aggMin) => {
+		this.ws.on('XA', (aggMin) => {
 			Each(this.subscriptions, (sub) => {
 				sub.callback({
 					open: aggMin.o,

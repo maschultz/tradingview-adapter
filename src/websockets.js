@@ -6,7 +6,7 @@ class PolygonWebsockets extends EventEmitter {
 		super();
 		this.subscriptions = [];
 		this.ws = null;
-		console.log('Polygon WebSocket class initialized.');
+		// console.log('Polygon WebSocket class initialized.');
 		this.apiKey = params.apiKey;
 		this.connect();
 	}
@@ -15,7 +15,10 @@ class PolygonWebsockets extends EventEmitter {
 		this.subscriptions.push([channels]);
 		this.subscriptions = Flatten(this.subscriptions);
 		// If these are additional subscriptions, only send the new ones:
-		if (this.connected) this.sendSubscriptions(Flatten([channels]));
+		if (this.connected) {
+			this.sendSubscriptions(Flatten([channels]));
+			// console.log ("subscribe func in WS: " + this);
+		}
 	}
 	connect() {
 		this.connected = false;
@@ -35,15 +38,11 @@ class PolygonWebsockets extends EventEmitter {
 	}
 	sendSubscriptions(subscriptions) {
 		if (subscriptions.length == 0) {
-			console.log(
-				'no subscriptions detected in websocket file, check the pass from the index file.'
-			);
 			return;
 		}
 		this.ws.send(
 			`{"action":"subscribe","params":"${subscriptions.join(',')}"}`
 		);
-		console.log('looks like we got a signal, and here it is: ' + this);
 	}
 	onDisconnect() {
 		setTimeout(this.connect.bind(this), 2000);
